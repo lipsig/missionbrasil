@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import {
     Avatar,
@@ -13,8 +14,20 @@ import {
 export default function Panel() {
 
     const { data: session } = useSession();
+    const [products, setProducts] = useState([]);
+useEffect(() => {
+         const fetchProducts = async () => {
+        const res = await fetch('http://localhost:3000/api/products');
+        const data = await res.json();
+        console.log(data.record.products)
+        setProducts(data.record.products);
+    };
 
-    if (!session) { return false}
+    fetchProducts();
+}, []);
+
+    if (!session) { return false }
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -40,7 +53,21 @@ export default function Panel() {
                             Logout
                         </Button>
                     </div>
-
+                    <div className="grid grid-cols-3 gap-4">
+                        {products.length > 0 ? (
+                            products.map((product: any) => (
+                                <div key={product.id} className="border p-4 rounded-lg">
+                                    <h2 className="text-xl font-bold mb-2">{product.name}</h2>
+                                    <p className="mb-2">{product.description}</p>
+                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Add to cart
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No products found</p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
