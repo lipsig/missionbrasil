@@ -38,7 +38,7 @@ export default function Panel() {
     const [newProductDescription, setNewProductDescription] = useState('');
     const [newProductPrice, setNewProductPrice] = useState('');    
     const [isEditing, setIsEditing] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState(null);
+    const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
 
     const router = useRouter();
 
@@ -80,6 +80,11 @@ export default function Panel() {
     const handlerUpdateProduct = async () => {
         if (!newProductName || !newProductDescription || !newProductPrice) {
             alert('Todos os campos são obrigatórios!');
+            return;
+        }
+
+        if (!currentProduct) {
+            console.error('No product selected for update');
             return;
         }
     
