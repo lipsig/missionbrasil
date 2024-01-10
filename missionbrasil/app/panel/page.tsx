@@ -37,7 +37,10 @@ export default function Panel() {
     const [products, setProducts] = useState<Product[]>([]);
     const [newProductName, setNewProductName] = useState('');
     const [newProductDescription, setNewProductDescription] = useState('');
-    const [newProductPrice, setNewProductPrice] = useState('');
+    const [newProductPrice, setNewProductPrice] = useState('');    
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState(null);
+
     const router = useRouter();
 
     const { data: session } = useSession({
@@ -60,9 +63,63 @@ export default function Panel() {
 
     }
 
-    const handleAddProduct = async () => {
+    const handlerEditProduct = async (id: string) => {
+        setIsEditing(true);
+        const product = products.find((product) => product.id === id);
+    
+        if (!product) {
+            alert('Produto não encontrado!');
+            return;
+        }
+    
+        setCurrentProduct(product);
+        setNewProductName(product.name);
+        setNewProductDescription(product.description);
+        setNewProductPrice(product.price);
+    }
+    
+    const handlerUpdateProduct = async () => {
+        if (!newProductName || !newProductDescription || !newProductPrice) {
+            alert('Todos os campos são obrigatórios!');
+            return;
+        }
+    
+        const updatedProduct = {
+            id: currentProduct.id,
+            name: newProductName,
+            description: newProductDescription,
+            price: newProductPrice
+        };
+    
+        try {
+            updateProduct(updatedProduct);
+    
+            const updatedProducts = products.map((product) => 
+                product.id === currentProduct.id ? updatedProduct : product
+            );
+    
+            setProducts(updatedProducts);
+            setIsEditing(false);
+            setCurrentProduct(null);
+            setNewProductName('');
+            setNewProductDescription('');
+            setNewProductPrice('');
+        } catch (error) {
+            console.error('Error updating products:', error);
+        }
+    };
+    
+
+    const handlerAddProduct = async () => {
+
+        if (!newProductName || !newProductDescription || !newProductPrice) {
+            alert('Todos os campos são obrigatórios!');
+            return;
+        }
+        
+
         const newProduct = {
-            id: Math.random().toString(36).substring(2, 15), // Random ID
+            id: Math.floor(Math.random() * 1000000).toString(), // Random number
             name: newProductName,
             description: newProductDescription,
             price: newProductPrice
@@ -107,7 +164,7 @@ export default function Panel() {
                             </Avatar>
                             <div>
                                 <span className="text-xl font-bold mb-2">User: {session.user?.name}</span>
-                                <br/>
+                                <br />
                                 <span className="text-xl font-bold">Email: ({session.user?.email})</span>
                             </div>
                         </div>
@@ -121,33 +178,37 @@ export default function Panel() {
                         <h3 className="text-left text-2xl font-extrabold text-gray-900 mb-6">
                             Adicionar um novo Produto a loja:
                         </h3>
+
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             type="text"
-                            placeholder="Product Name"
+                            placeholder="Nome do Produto"
                             value={newProductName}
                             onChange={(e) => setNewProductName(e.target.value)}
+                            required
                         />
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             type="text"
-                            placeholder="Product Description"
+                            placeholder="Descrição do Produto"
                             value={newProductDescription}
                             onChange={(e) => setNewProductDescription(e.target.value)}
+                            required
                         />
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             type="number"
-                            placeholder="Product Price"
+                            placeholder="Preço do Produto"
                             value={newProductPrice}
                             onChange={(e) => setNewProductPrice(e.target.value)}
+                            required
                         />
-                        <button 
+                        <Button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={handleAddProduct}
-                        >
-                            Salvar
-                        </button>
+                            onClick={isEditing ? handlerUpdateProduct : handlerAddProduct}
+                            >
+                                {isEditing ? 'Editar' : 'Salvar'}
+                        </Button>
                     </div>
                     <div className="grid grid-cols-1 gap-4 mt-5">
                         {products.length > 0 ? (
@@ -158,7 +219,9 @@ export default function Panel() {
                                         <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</TableHead>
                                         <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</TableHead>
                                         <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</TableHead>
+                                        <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</TableHead>
                                         <TableHead className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Deletar</TableHead>
+                                        <TableHead className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Editar</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody className="bg-white divide-y divide-gray-200">
@@ -167,13 +230,21 @@ export default function Panel() {
                                             <TableCell className="px-6 py-4 whitespace-nowrap">{product.id}</TableCell>
                                             <TableCell className="px-6 py-4 whitespace-nowrap">{product.name}</TableCell>
                                             <TableCell className="px-6 py-4 whitespace-nowrap">{product.description}</TableCell>
+                                            <TableCell className="px-6 py-4 whitespace-nowrap">{`R$ ${Number(product.price).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}</TableCell>
                                             <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <Button onClick={() => {
                                                     handlerDeleteProduct(product.id);
                                                 }} className="bg-red-600 hover:bg-red-700">
                                                     Deletar
-                                                </Button>
+                                                </Button>                                      
                                             </TableCell>
+                                            <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <Button onClick={() => {
+                                                    handlerEditProduct(product.id);
+                                                }} className="bg-gray-600 hover:bg-gray-700">
+                                                    Editar
+                                                </Button>
+                                                </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
