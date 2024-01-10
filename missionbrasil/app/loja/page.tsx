@@ -72,8 +72,10 @@ const Loja = () => {
 
     return (
         <div>
+            <div className="flex justify-center mt-10">
+                <SearchField setSearchTerm={setSearchTerm} />
+            </div>
             <div className="grid grid-cols-3 gap-4 p-4 mt-20 mb-20">
-            <SearchField setSearchTerm={setSearchTerm} />
                 {filteredProducts.map(product => (
                     <div key={product.id} className="bg-gray-200 p-4 rounded shadow m-4">
                         <div className="h-64 bg-gray-400 mb-4"></div>
