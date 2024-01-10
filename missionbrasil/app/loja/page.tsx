@@ -36,10 +36,18 @@ const Loja = () => {
     }, []);
 
     const addToCart = (product) => {
-        setCart([...cart, product]);
+        const productExistsInCart = cart.some(cartProduct => cartProduct.id === product.id);
+    
+        if (!productExistsInCart) {
+            setCart([...cart, product]);
+        } else {
+            const updatedCart = cart.map(cartProduct => cartProduct.id === product.id ? product : cartProduct);
+            setCart(updatedCart);
+        }
+    
         setIsDrawerOpen(true);
     };
-
+    
     const removeFromCart = (productId) => {
         setCart(cart.filter(product => product.id !== productId));
     };
