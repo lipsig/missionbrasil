@@ -23,7 +23,7 @@ As principais páginas da aplicação são:
 
 Na rota do Painel, é possível realizar operações completas de CRUD com os produtos: ler, editar, deletar e adicionar.
 
-Na rota da Loja, é possível visualizar os produtos registrados e simular a adição deles ao carrinho.
+Na rota da Loja, é possível visualizar os produtos registrados e simular a adição deles ao carrinho, e filtrar/buscar produtos digitando na barra de pesquisa
 
 ## Implantação
 A aplicação será implantada na Vercel.
