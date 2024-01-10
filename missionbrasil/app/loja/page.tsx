@@ -15,13 +15,21 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer"
 
+type Product = {
+    id: string;
+    name: string;
+    description: string;
+    price: string;
+};
+
+
 const Loja = () => {
-    const [products, setProducts] = useState([]);
-    const [cart, setCart] = useState([]);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [cart, setCart] = useState<Product[]>([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
 
-    const drawerTriggerRef = useRef(null);
+    const drawerTriggerRef = useRef<HTMLButtonElement | null>(null);
 
     useEffect(() => {
         if (isDrawerOpen && drawerTriggerRef.current) {
@@ -35,7 +43,7 @@ const Loja = () => {
         setProducts(products);
     }, []);
 
-    const addToCart = (product) => {
+    const addToCart = (product:any) => {
         const productExistsInCart = cart.some(cartProduct => cartProduct.id === product.id);
 
         if (!productExistsInCart) {
@@ -48,7 +56,7 @@ const Loja = () => {
         setIsDrawerOpen(true);
     };
 
-    const removeFromCart = (productId) => {
+    const removeFromCart = (productId:any) => {
         setCart(cart.filter(product => product.id !== productId));
     };
 
