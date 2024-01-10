@@ -26,7 +26,9 @@ Na rota do Painel, é possível realizar operações completas de CRUD com os pr
 Na rota da Loja, é possível visualizar os produtos registrados e simular a adição deles ao carrinho, e filtrar/buscar produtos digitando na barra de pesquisa
 
 ## Implantação
-A aplicação será implantada na Vercel.
+A aplicação está implantada na Vercel
+
+https://missionbrasil-felipelourenzi.vercel.app/
 
 
 Desenvolvido por Felipe Lourenzi
