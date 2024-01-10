@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { getProducts } from '../components/fakeApi';
 import { Button } from "@/components/ui/button";
+import SearchField from "../components/searchField"
+
 
 import {
     Drawer,
@@ -27,7 +29,7 @@ const Loja = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [cart, setCart] = useState<Product[]>([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+    const [searchTerm, setSearchTerm] = useState(''); // Adicione um estado para o termo de pesquisa
 
     const drawerTriggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -42,6 +44,10 @@ const Loja = () => {
         const products = getProducts();
         setProducts(products);
     }, []);
+
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ); 
 
     const addToCart = (product:any) => {
         const productExistsInCart = cart.some(cartProduct => cartProduct.id === product.id);
@@ -67,7 +73,8 @@ const Loja = () => {
     return (
         <div>
             <div className="grid grid-cols-3 gap-4 p-4 mt-20 mb-20">
-                {products.map((product) => (
+            <SearchField setSearchTerm={setSearchTerm} />
+                {filteredProducts.map(product => (
                     <div key={product.id} className="bg-gray-200 p-4 rounded shadow m-4">
                         <div className="h-64 bg-gray-400 mb-4"></div>
                         <h2 className="text-xl font-bold mb-2 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.name}</h2>
