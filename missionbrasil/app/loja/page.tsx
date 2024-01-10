@@ -37,17 +37,17 @@ const Loja = () => {
 
     const addToCart = (product) => {
         const productExistsInCart = cart.some(cartProduct => cartProduct.id === product.id);
-    
+
         if (!productExistsInCart) {
             setCart([...cart, product]);
         } else {
             const updatedCart = cart.map(cartProduct => cartProduct.id === product.id ? product : cartProduct);
             setCart(updatedCart);
         }
-    
+
         setIsDrawerOpen(true);
     };
-    
+
     const removeFromCart = (productId) => {
         setCart(cart.filter(product => product.id !== productId));
     };
@@ -62,8 +62,8 @@ const Loja = () => {
                 {products.map((product) => (
                     <div key={product.id} className="bg-gray-200 p-4 rounded shadow m-4">
                         <div className="h-64 bg-gray-400 mb-4"></div>
-                        <h2 className="text-xl font-bold mb-2">{product.name}</h2>
-                        <p className="text-gray-700 mb-2">{product.description}</p>
+                        <h2 className="text-xl font-bold mb-2 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.name}</h2>
+                        <p className="text-gray-700 mb-2 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.description}</p>
                         <p className="text-lg font-bold mb-4">{`R$ ${Number(product.price).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}</p>
                         <Button onClick={() => addToCart(product)} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Adicionar ao carrinho</Button>
                     </div>
@@ -81,8 +81,8 @@ const Loja = () => {
                             {cart.map((product) => (
                                 <div key={product.id} className="bg-gray-200 p-4 rounded shadow m-4 flex-none w-1/2 md:w-1/4 lg:w-1/6">
                                     <div className="h-32 bg-gray-400 mb-4"></div>
-                                    <h2 className="text-xl font-bold mb-2">{product.name}</h2>
-                                    <p className="text-gray-700 mb-2">{product.description}</p>
+                                    <h2 className="text-xl font-bold mb-2 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.name}</h2>
+                                    <p className="text-gray-700 mb-2 overflow-hidden whitespace-nowrap overflow-ellipsis">{product.description}</p>
                                     <p className="text-lg font-bold mb-4">{`R$ ${Number(product.price).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}</p>
                                     <Button onClick={() => removeFromCart(product.id)} className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Remover do carrinho</Button>
                                 </div>
