@@ -12,7 +12,7 @@ const SearchField = ({ setSearchTerm }) => {
     };
 
     return (
-        <Input type="text" value={localSearchTerm} onChange={handleSearchChange} placeholder="Digite Para Pesquisar Produto..." />
+        <Input type="text" value={localSearchTerm} onChange={handleSearchChange} placeholder="Digite Para Pesquisar Produtos..." />
     );
 };
 

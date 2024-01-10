@@ -72,7 +72,7 @@ const Loja = () => {
 
     return (
         <div>
-            <div className="flex justify-center mt-10">
+            <div className="w-1/2 mx-auto flex justify-center mt-10">
                 <SearchField setSearchTerm={setSearchTerm} />
             </div>
             <div className="grid grid-cols-3 gap-4 p-4 mt-20 mb-20">
